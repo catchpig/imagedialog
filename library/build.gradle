@@ -6,7 +6,7 @@ version = VERSION      //这个是版本号，必须填写
 android {
     compileSdkVersion 26
     buildToolsVersion "26.0.0"
-    resourcePrefix "imagedialog_"     //这里随便填
+    resourcePrefix ""     //这里随便填
 
     defaultConfig {
         minSdkVersion 16

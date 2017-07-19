@@ -8,6 +8,9 @@
     tools:context="com.zhuazhu.main.MainActivity">
 
     <TextView
+        android:id="@+id/show"
+        android:clickable="true"
+        android:onClick="onClick"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hello World!"

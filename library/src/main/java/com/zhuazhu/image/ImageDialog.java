@@ -57,6 +57,17 @@ public class ImageDialog extends Dialog implements OnClickListener,OnPhotoTapLis
         url_length = mUrls.size();
 
     }
+    private String host = "";
+
+    /**
+     * 设置
+     * @param host
+     */
+    public void setHost(String host){
+        if(isNotEmpty(host)){
+            this.host = host;
+        }
+    }
     private ViewPager mViewPager;
     private TextView mIndex;
     @Override
@@ -105,6 +116,9 @@ public class ImageDialog extends Dialog implements OnClickListener,OnPhotoTapLis
             public Object instantiateItem(ViewGroup container, int position) {
                 PhotoDraweeView v = new PhotoDraweeView(getContext());
                 String url = mUrls.get(position);
+                if(isNotEmpty(host)){
+                    url = host+url;
+                }
                 Uri URI = Uri.parse(url);
                 v.setPhotoUri(URI);
                 ViewParent vp = v.getParent();
@@ -130,6 +144,27 @@ public class ImageDialog extends Dialog implements OnClickListener,OnPhotoTapLis
         mViewPager.setCurrentItem(0);
         mIndex.setText("1/"+url_length);
         mViewPager.addOnPageChangeListener(this);
+    }
+    /**
+     * 判断字符串是否为空
+     *
+     * @param str
+     * @return
+     */
+    public boolean isEmpty(String str) {
+        boolean flag = true;
+        flag = (str == null || "".equals(str.trim()));
+        return flag;
+    }
+
+    /**
+     * 判断字符串是否不为空
+     *
+     * @param str
+     * @return
+     */
+    public boolean isNotEmpty(String str) {
+        return !isEmpty(str);
     }
 
     @Override
