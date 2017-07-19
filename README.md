@@ -4,9 +4,9 @@
 图片展示控件(放大缩小)
 ## 第三方库
 ```
-facebook第三方图片加载库:fresco
+facebook第三方图片加载库:[fresco](https://github.com/ongakuer/PhotoDraweeView)
 
-控件放大缩小控件:photodraweeview
+控件放大缩小控件:[photodraweeview](https://github.com/facebook/fresco)
 ```
 ## [photodraweeview](https://github.com/ongakuer/PhotoDraweeView)
 ## [fresco](https://github.com/facebook/fresco)
