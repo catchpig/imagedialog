@@ -1,5 +1,5 @@
 # imagedialog
-[ ![Download](https://api.bintray.com/packages/zhuazhu/maven/imagedialog/images/download.svg) ](https://bintray.com/zhu/maven/imagedialog/_latestVersion)
+[ ![Download](https://api.bintray.com/packages/zhu/maven/imagedialog/images/download.svg) ](https://bintray.com/zhu/maven/imagedialog/_latestVersion)
 
 图片展示控件(放大缩小)
 ## 第三方库
