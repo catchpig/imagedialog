@@ -60,7 +60,7 @@ public class ImageDialog extends Dialog implements OnClickListener,OnPhotoTapLis
     private String host = "";
 
     /**
-     * 设置
+     * 设置图片地址前缀
      * @param host
      */
     public void setHost(String host){
@@ -96,6 +96,9 @@ public class ImageDialog extends Dialog implements OnClickListener,OnPhotoTapLis
         }else{
             frameLayout.setVisibility(View.GONE);
             draweeView.setVisibility(View.VISIBLE);
+            if(isNotEmpty(host)){
+                imgurl = host+imgurl;
+            }
             Uri URI = Uri.parse(imgurl);
             draweeView.setPhotoUri(URI);
             draweeView.setOnPhotoTapListener(this);
