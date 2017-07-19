@@ -3,12 +3,12 @@
 
 图片展示控件(放大缩小)
 ## 第三方库
-### [fresco](https://github.com/facebook/fresco)
+[fresco](https://github.com/facebook/fresco)
 ```
 facebook第三方图片加载库:fresco
 该库需要在Application中初始化,详见fresco的链接地址
 ```
-### [photodraweeview](https://github.com/ongakuer/PhotoDraweeView)
+[photodraweeview](https://github.com/ongakuer/PhotoDraweeView)
 ```
 控件放大缩小控件:photodraweeview
 ```
@@ -25,8 +25,7 @@ dependencies {
 ## 单张图片显示
 ```
 //图片地址
-String url = "http://img0.imgtn.bdimg.com/it/u=108724125," +
-                              "966706653&fm=26&gp=0.jpg";
+String url = "http://img0.imgtn.bdimg.com/it/u=108724125,966706653&fm=26&gp=0.jpg";
 new ImageDialog(this,url).show();
 ```
 
