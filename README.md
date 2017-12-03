@@ -16,9 +16,13 @@ facebook第三方图片加载库:fresco
 ## Gradle
 ```
 dependencies {
-    compile 'com.facebook.fresco:fresco:1.3.0'
-    compile 'me.relex:photodraweeview:1.1.2'
-    compile 'com.zhuazhu.image:library:0.1.0'
+    compile ('com.zhuazhu.image:library:0.1.5',{
+            exclude group: 'com.android.support'
+            //如果项目中已经用到了,需要排除
+            exclude group: 'com.facebook.fresco'
+            //如果项目中已经用到了,需要排除
+            exclude group: 'me.relex'
+    })
 }
 ```
 

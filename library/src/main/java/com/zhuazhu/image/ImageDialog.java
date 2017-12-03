@@ -33,7 +33,6 @@ import me.relex.photodraweeview.PhotoDraweeView;
 
 public class ImageDialog extends Dialog implements OnClickListener,OnPhotoTapListener,OnPageChangeListener {
     private String imgurl;
-
     /**
      * 单张图片使用
      * @param context
