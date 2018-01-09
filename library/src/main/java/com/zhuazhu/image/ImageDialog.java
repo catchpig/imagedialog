@@ -29,6 +29,7 @@ import me.relex.photodraweeview.PhotoDraweeView;
  * 修改人: 李涛<br/>
  * 修改时间: 2017/5/25 18:29<br/>
  * 描述:展示图片,可放大缩小,图片切换查看
+ * 如果使用setIndex方法,必须先show()之后,才能调该方法
  */
 
 public class ImageDialog extends Dialog implements OnClickListener,OnPhotoTapListener,OnPageChangeListener {
@@ -43,7 +44,7 @@ public class ImageDialog extends Dialog implements OnClickListener,OnPhotoTapLis
         imgurl = url;
     }
     private List<String> mUrls = new ArrayList<>();
-    private int url_length;
+    private int url_length = 1;
 
     /**
      * 多张图片使用
@@ -146,6 +147,12 @@ public class ImageDialog extends Dialog implements OnClickListener,OnPhotoTapLis
         mViewPager.setCurrentItem(0);
         mIndex.setText("1/"+url_length);
         mViewPager.addOnPageChangeListener(this);
+    }
+    public void setIndex(int index){
+        if(index>=url_length){
+            return;
+        }
+        mViewPager.setCurrentItem(index);
     }
     /**
      * 判断字符串是否为空
