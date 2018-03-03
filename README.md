@@ -1,29 +1,26 @@
 # imagedialog
-[ ![Download](https://api.bintray.com/packages/zhu/maven/imagedialog/images/download.svg) ](https://bintray.com/zhu/maven/imagedialog/_latestVersion)
+[![Release](https://jitpack.io/v/zhuazhu/imagedialog.svg)](https://jitpack.io/#zhuazhu/imagedialog)
 
 图片展示控件(放大缩小)
+
 ## 第三方库
-[fresco](https://github.com/facebook/fresco)
+[PhotoView](https://github.com/chrisbanes/PhotoView)
 ```
-facebook第三方图片加载库:fresco
-该库需要在Application中初始化,详见fresco的链接地址
-```
-[photodraweeview](https://github.com/ongakuer/PhotoDraweeView)
-```
-控件放大缩小控件:photodraweeview
+控件放大缩小控件
 ```
 
 ## Gradle
+在Project的build.gradle中添加:
+   ```
+   allprojects {
+    	repositories {
+    		maven { url 'https://jitpack.io' }
+    	}
+    }
+   ```
+添加依赖:
 ```
-dependencies {
-    compile ('com.zhuazhu.image:library:0.1.5',{
-            exclude group: 'com.android.support'
-            //如果项目中已经用到了,需要排除
-            exclude group: 'com.facebook.fresco'
-            //如果项目中已经用到了,需要排除
-            exclude group: 'me.relex'
-    })
-}
+implementation 'com.github.zhuazhu:imagedialog:last_version'
 ```
 
 ## 单张图片显示
@@ -43,14 +40,33 @@ list.add("http://c.hiphotos.baidu.com/image/pic/item/728da9773912b31ba27617218e1
 list.add("http://image.tianjimedia.com/uploadImages/2015/227/37/SU4O4L7V51U5.jpg");
 new ImageDialog(this,list).show();
 ```
+## 构造方法
+1.ImageDialog(Context context, String url)
+
+设置单张图片
+
+2.ImageDialog(Context context, String... urls)
+
+数组设置多张图片
+
+3.ImageDialog(Context context, List<String> urls)
+
+集合设置多张图片
 
 ## 方法说明
+|方法|描述|
+|:--|:--|
+|show()|展示图片|
+|setIndex(int index)|设置当前展示图片,该方法必须在show()之后调用|
+|setImageLoader(ImageLoader imageLoader)|设置图片加载处理器,该方法必须在show()之前调用|
+
+## 代码参考
+1.实现ImageLoader接口,选择需要加载图片的第三方库(Glide,Picasso...)如下代码使用的是Glide
 ```
-设置图片访问地址的前缀:
-    setHost(String host)
-如:
-    String host = "http://image.tianjimedia.com";
-    ImageDialog dialog = new ImageDialog(this,"/uploadImages/2015/285/24/586K2UOWHG9D.jpg");
-    dialog.setHost(host);
-    dialog.show();
+    public class GlideImageLoader implements ImagePagerAdapter.ImageLoader {
+        @Override
+        public void displayImage(ImageView imageView, String path) {
+            Glide.with(imageView.getContext()).load(path).into(imageView);
+        }
+    }
 ```
