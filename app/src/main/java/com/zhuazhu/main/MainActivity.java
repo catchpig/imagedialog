@@ -3,7 +3,9 @@ package com.zhuazhu.main;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.zhuazhu.image.ImageDialog;
 
 import java.util.ArrayList;
@@ -35,8 +37,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 ".com/image/pic/item/728da9773912b31ba27617218e18367adab4e1a4.jpg");
         list.add("http://image.tianjimedia.com/uploadImages/2015/227/37/SU4O4L7V51U5.jpg");
         ImageDialog dialog = new ImageDialog(this,list);
+        dialog.setImageLoader(new ImageDialog.ImageLoader() {
+            @Override
+            public void displayImage(ImageView imageView, String path) {
+                Glide.with(imageView.getContext()).load(path).into(imageView);
+            }
+        });
         dialog.show();
-        dialog.setIndex(2);
+//        dialog.setIndex(2);
 
     }
 }

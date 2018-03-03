@@ -7,9 +7,8 @@
     android:layout_height="match_parent"
     tools:context="com.zhuazhu.main.MainActivity">
 
-    <TextView
+    <Button
         android:id="@+id/show"
-        android:clickable="true"
         android:onClick="onClick"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -2,13 +2,10 @@ package com.zhuazhu.image;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.view.Window;
@@ -17,11 +14,11 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.github.chrisbanes.photoview.PhotoView;
+import com.zhuazhu.wedgit.MultipleTouchViewPager;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import me.relex.photodraweeview.OnPhotoTapListener;
-import me.relex.photodraweeview.PhotoDraweeView;
 
 /**
  * 创建时间:2017/5/25 18:29<br/>
@@ -32,19 +29,48 @@ import me.relex.photodraweeview.PhotoDraweeView;
  * 如果使用setIndex方法,必须先show()之后,才能调该方法
  */
 
-public class ImageDialog extends Dialog implements OnClickListener,OnPhotoTapListener,OnPageChangeListener {
-    private String imgurl;
+public class ImageDialog extends Dialog implements View.OnClickListener,OnPageChangeListener {
+    /**
+     * 图片地址的集合
+     */
+    private List<String> mUrls;
+    /**
+     * 图片的张数
+     */
+    private int mUrlLength;
+    /**
+     * 图片加载器
+     */
+    private ImageLoader mImageLoader;
+
+    public void setImageLoader(ImageLoader imageLoader) {
+        mImageLoader = imageLoader;
+    }
+
     /**
      * 单张图片使用
      * @param context
      * @param url
      */
     public ImageDialog(Context context, String url) {
-        super(context, R.style.imagedialog_dialog);
-        imgurl = url;
+        super(context, R.style.imagedialog);
+        mUrls = new ArrayList<>();
+        mUrls.add(url);
     }
-    private List<String> mUrls = new ArrayList<>();
-    private int url_length = 1;
+    /**
+     * 多张图片使用
+     * @param context
+     * @param urls
+     */
+    public ImageDialog(Context context, String... urls) {
+        super(context, R.style.imagedialog);
+        mUrls = new ArrayList<>();
+        for (String url:urls){
+            mUrls.add(url);
+        }
+    }
+
+
 
     /**
      * 多张图片使用
@@ -52,23 +78,11 @@ public class ImageDialog extends Dialog implements OnClickListener,OnPhotoTapLis
      * @param urls
      */
     public ImageDialog(Context context, List<String> urls) {
-        super(context, R.style.imagedialog_dialog);
+        super(context, R.style.imagedialog);
         mUrls = urls;
-        url_length = mUrls.size();
-
     }
-    private String host = "";
 
-    /**
-     * 设置图片地址前缀
-     * @param host
-     */
-    public void setHost(String host){
-        if(isNotEmpty(host)){
-            this.host = host;
-        }
-    }
-    private ViewPager mViewPager;
+    private MultipleTouchViewPager mViewPager;
     private TextView mIndex;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,26 +97,27 @@ public class ImageDialog extends Dialog implements OnClickListener,OnPhotoTapLis
         WindowManager.LayoutParams lp = dialogWindow.getAttributes();
         lp.width = WindowManager.LayoutParams.MATCH_PARENT;
         lp.height = WindowManager.LayoutParams.MATCH_PARENT;
-        PhotoDraweeView draweeView = (PhotoDraweeView) findViewById(R.id.img);
-        ImageView close = (ImageView) findViewById(R.id.close);
-        FrameLayout frameLayout = (FrameLayout) findViewById(R.id.frame);
-        mViewPager = (ViewPager) findViewById(R.id.viewPager);
-        mIndex = (TextView) findViewById(R.id.index);
+        ImageView close =  findViewById(R.id.mframe_close);
+        FrameLayout frameLayout =  findViewById(R.id.mframe_frame);
+        mViewPager = findViewById(R.id.mframe_viewpager);
+        mIndex = findViewById(R.id.mframe_index);
         close.setOnClickListener(this);
+        mUrlLength = mUrls.size();
         if(mUrls.size()>0){
             frameLayout.setVisibility(View.VISIBLE);
-            draweeView.setVisibility(View.GONE);
             initViewPage();
-        }else{
-            frameLayout.setVisibility(View.GONE);
-            draweeView.setVisibility(View.VISIBLE);
-            if(isNotEmpty(host)){
-                imgurl = host+imgurl;
-            }
-            Uri URI = Uri.parse(imgurl);
-            draweeView.setPhotoUri(URI);
-            draweeView.setOnPhotoTapListener(this);
         }
+    }
+
+    /**
+     * 设置当前查看哪张图片
+     * @param index
+     */
+    private void setIndex(int index){
+        if(index>=mUrlLength){
+            return;
+        }
+        mViewPager.setCurrentItem(index);
     }
     private void initViewPage(){
         mViewPager.setAdapter(new PagerAdapter() {
@@ -117,72 +132,36 @@ public class ImageDialog extends Dialog implements OnClickListener,OnPhotoTapLis
             }
             @Override
             public Object instantiateItem(ViewGroup container, int position) {
-                PhotoDraweeView v = new PhotoDraweeView(getContext());
-                String url = mUrls.get(position);
-                if(isNotEmpty(host)){
-                    url = host+url;
+                if(mImageLoader==null){
+                    return null;
                 }
-                Uri URI = Uri.parse(url);
-                v.setPhotoUri(URI);
+                PhotoView v = new PhotoView(getContext());
+                String url = mUrls.get(position);
+                mImageLoader.displayImage(v,url);
                 ViewParent vp = v.getParent();
                 if (vp!=null){
                     ViewGroup parent = (ViewGroup)vp;
                     parent.removeView(v);
                 }
-                container.addView(v);
-                v.setOnPhotoTapListener(new OnPhotoTapListener() {
-                    @Override
-                    public void onPhotoTap(View view, float x, float y) {
-                        cancel();
-                    }
-                });
+                container.addView(v, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                v.setOnClickListener(ImageDialog.this);
                 return v;
             }
 
             @Override
             public void destroyItem(ViewGroup container, int position, Object object) {
-
+                container.removeView((View) object);
             }
+
         });
         mViewPager.setCurrentItem(0);
-        mIndex.setText("1/"+url_length);
+        mIndex.setText("1/"+ mUrlLength);
         mViewPager.addOnPageChangeListener(this);
     }
-    public void setIndex(int index){
-        if(index>=url_length){
-            return;
-        }
-        mViewPager.setCurrentItem(index);
-    }
-    /**
-     * 判断字符串是否为空
-     *
-     * @param str
-     * @return
-     */
-    public boolean isEmpty(String str) {
-        boolean flag = true;
-        flag = (str == null || "".equals(str.trim()));
-        return flag;
-    }
 
-    /**
-     * 判断字符串是否不为空
-     *
-     * @param str
-     * @return
-     */
-    public boolean isNotEmpty(String str) {
-        return !isEmpty(str);
-    }
 
     @Override
     public void onClick(View v) {
-        cancel();
-    }
-
-    @Override
-    public void onPhotoTap(View view, float x, float y) {
         cancel();
     }
 
@@ -193,11 +172,18 @@ public class ImageDialog extends Dialog implements OnClickListener,OnPhotoTapLis
 
     @Override
     public void onPageSelected(int position) {
-        mIndex.setText((position+1)+"/"+url_length);
+        mIndex.setText((position+1)+"/"+ mUrlLength);
     }
 
     @Override
     public void onPageScrollStateChanged(int state) {
 
+    }
+
+    /**
+     * 图片加载处理(自行选择图片加载框架)
+     */
+    public interface ImageLoader {
+        void displayImage(ImageView imageView,String path);
     }
 }
