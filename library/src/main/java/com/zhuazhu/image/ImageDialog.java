@@ -113,7 +113,7 @@ public class ImageDialog extends Dialog implements View.OnClickListener,OnPageCh
      * 设置当前查看哪张图片
      * @param index
      */
-    private void setIndex(int index){
+    public void setIndex(int index){
         if(index>=mUrlLength){
             return;
         }
