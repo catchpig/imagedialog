@@ -23,16 +23,12 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:26.0.2'
-    testCompile 'junit:junit:4.12'
+    implementation 'com.android.support:appcompat-v7:26.0.2'
+    testImplementation 'junit:junit:4.12'
     //图片放大缩小控件
-    api 'com.github.chrisbanes:PhotoView:2.1.3'
-    //工具包
-    api('com.github.zhuazhu:Common:1.0.4', {
-        exclude group: 'com.android.support'
-    })
+    implementation 'com.github.chrisbanes:PhotoView:2.1.3'
 }
